@@ -58,8 +58,8 @@ int main() {
 
 // Q1: Calculates the sum of the first n numbers consisting of just 1s
 int q_one(int n) {
-    int acc = 0, sum = 0;
-    for (int i = 0; i < n; i++) {
+    int acc = 0, sum = 0, i;
+    for (i = 0; i < n; i++) {
         acc = (acc * 10) + 1;
         sum += acc;
     }
