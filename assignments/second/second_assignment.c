@@ -128,12 +128,13 @@ int q_three(int n) {
     Q4: Find all amicable numbers within given range
     Param: `n` - The range of numbers to search within
 */
-
 int sum_devisors(int n) {
-    int i, sum = 0, limit = sqrt(n);
-    for (i = 2; i <= limit; i++) {
-        if (!(n % i))
+    int i, sum = 1; // 1 is always a divisor (except for n=1)
+    for (i = 2; i * i <= n; i++) {
+        if (!(n % i)) {
             sum += i;
+            if (i != n / i) sum += n / i; // Avoid double-counting the square root
+        }
     }
 
     return sum;
@@ -142,12 +143,15 @@ int sum_devisors(int n) {
 void q_four(int n) {
     int i, sum_of_a, sum_of_b;
 
-    for (i = 1; i < n; i++) {
+    // Staring the loop from 2 because the amicable numbers are defined for integers greater than 1
+    for (i = 2; i < n; i++) {
         sum_of_a = sum_devisors(i);
-        sum_of_b = sum_devisors(sum_of_a);
-        if ((!sum_of_a || !sum_of_b) && sum_of_a != sum_of_b)
-            continue;
         
-        ((sum_of_b < n || sum_of_a < n) && sum_of_b == i) && printf("Amicable numbers: (%d, %d)\n", i, sum_of_a);
+        // Practicly skipping the duplicates
+        if (sum_of_a <= i || sum_of_a >= n) 
+            continue;
+
+        sum_of_b = sum_devisors(sum_of_a);
+        sum_of_b == i && printf("Amicable numbers: (%d, %d)\n", i, sum_of_a);
     }
 }
