@@ -7,51 +7,10 @@ void q_two(int n);
 int q_three(int n);
 void q_four(int n);
 
-int main() {
-    int q_number, n;
-
-    printf("Enter the number of question to run (1-4): ");
-    scanf("%d", &q_number);
-
-    switch (q_number) {
-        case 1:
-            printf("Enter the length of the list to find the longest sub-sequence in it: ");
-            scanf("%d", &n);
-            printf("The sum is: %d", q_one(n));
-            break;
-
-        case 2:
-            printf("Enter number to calculate the possible values for n (3x + 5y = n): ");
-            scanf("%d", &n);
-            q_two(n);
-            break;
-
-        case 3:
-            printf("Write the number to find it's exponent: ");
-            scanf("%d", &n);
-            if (q_three(n))
-                printf("YES");
-            else
-                printf("NO");
-            break;
-
-        case 4:
-            printf("Enter the max number to search the amicable numbers until: ");
-            scanf("%d", &n);
-            q_four(n);
-            break;
-
-        default:
-            printf("Invalid question number");
-            return 1;
-    }
-
-    return 0;
-}
 
 // Q1: Finds the longest sub sequence of the same number (1/0)
 int q_one(int n) {
-    int last_number = -1, current_number = -1, sub_length = 0, max_length = 0, starting_index = 0, i;
+    int last_number = -1, current_number = -1, sub_length = 0, max_length = 1, starting_index = 1, i;
     for (i = 0; i < n; i++) {
         scanf("%d", &current_number);
         
@@ -102,7 +61,7 @@ void q_two(int n) {
 
 
 /*
-    Q3: Check whether a given number is a "perfect power"
+    Q3: Check whether a given number is a "perfect power" (Narcissistic numbers)
     Param: `n` - The number to check
 */
 int q_three(int n) {
@@ -121,7 +80,8 @@ int q_three(int n) {
         exponent ++;
     }
 
-    return 0;
+    // Returns 1 when n is 0 because 0 is a narcissistic number
+    return n == 0 ? 1 : 0;
 }
 
 /* 
