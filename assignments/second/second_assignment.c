@@ -27,7 +27,7 @@ int main() {
             break;
 
         case 3:
-            printf("Write the number to find it's exponent: ");
+            printf("Write the number to check wheter it narcissistic number: ");
             scanf("%d", &n);
             if (q_three(n))
                 printf("YES");
@@ -51,7 +51,7 @@ int main() {
 
 // Q1: Finds the longest sub sequence of the same number (1/0)
 int q_one(int n) {
-    int last_number = -1, current_number = -1, sub_length = 0, max_length = 0, starting_index = 0, i;
+    int last_number = -1, current_number = -1, sub_length = 0, max_length = 1, starting_index = 1, i;
     for (i = 0; i < n; i++) {
         scanf("%d", &current_number);
         
@@ -96,32 +96,29 @@ void q_two(int n) {
     if (!best_x || !best_y) {
         printf("No solution found.\a");
     } else {
-        printf("x: %d, y: %d\n", best_x, best_y);
+        printf("(%d, %d)", best_x, best_y);
     }
 }
 
-
 /*
-    Q3: Check whether a given number is a "perfect power"
+    Q3: Check whether a given number is a "perfect power" (amstrong number / narcissistic number)
     Param: `n` - The number to check
 */
 int q_three(int n) {
-    int sum = 0, exponent = 1, original = n;
-    while (sum < n) {
-        sum = 0;
-        while (n > 0) {
-            sum += pow(n % 10, exponent);
-            n /= 10;
-        }
-
-        if (sum == original)
-            return 1;
-
-        n = original;
-        exponent ++;
+    int sum = 0, count = 0, original = n;
+    
+    while (n > 0) {
+        count ++;
+        n /= 10;
     }
 
-    return 0;
+    n = original;
+    while(n > 0) {
+        sum += pow(n % 10, count);
+        n /= 10;
+    }
+
+    return sum == original;
 }
 
 /* 

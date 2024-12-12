@@ -20,8 +20,6 @@ void test_q_one() {
 //     redirect_io("", 1);
 //     q_two(52);
 
-//     // Read the value from output file
-
 //     assert(strstr("9") != NULL);
 //     assert(strstr("5") != NULL);
 // }

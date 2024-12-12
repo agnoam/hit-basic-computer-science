@@ -55,33 +55,29 @@ void q_two(int n) {
     if (!best_x || !best_y) {
         printf("No solution found.\a");
     } else {
-        printf("x: %d, y: %d\n", best_x, best_y);
+        printf("(%d, %d)", best_x, best_y);
     }
 }
 
-
 /*
-    Q3: Check whether a given number is a "perfect power" (Narcissistic numbers)
+    Q3: Check whether a given number is a "perfect power" (amstrong number / narcissistic number)
     Param: `n` - The number to check
 */
 int q_three(int n) {
-    int sum = 0, exponent = 1, original = n;
-    while (sum < n) {
-        sum = 0;
-        while (n > 0) {
-            sum += pow(n % 10, exponent);
-            n /= 10;
-        }
-
-        if (sum == original)
-            return 1;
-
-        n = original;
-        exponent ++;
+    int sum = 0, count = 0, original = n;
+    
+    while (n > 0) {
+        count ++;
+        n /= 10;
     }
 
-    // Returns 1 when n is 0 because 0 is a narcissistic number
-    return n == 0 ? 1 : 0;
+    n = original;
+    while(n > 0) {
+        sum += pow(n % 10, count);
+        n /= 10;
+    }
+
+    return sum == original;
 }
 
 /* 
