@@ -83,7 +83,7 @@ Which improved the overall runtime complexity to $O(n\sqrt(n))$.
 
 Check each function that starts with q_* in the provided c code below, suggest enhancements for more efficient code, and find possible logical bugs. ignore validation checks in your review. 
 
-```
+\```
 <second_assignment.c> as plain text here
-```
+\```
 </details>
