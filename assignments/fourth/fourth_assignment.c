@@ -3,8 +3,17 @@
 #include <limits.h>
 #include <math.h>
 
+
+// Black box functions declarations
+
+void print_array(int* arr, int n);
+
+//////////////////////////////////////
+
 int findCommonDigit(unsigned long long n1, unsigned long long n2);
 int moveDuplicatesV1(int* arr, int n);
+void print_array(int* arr, int n);
+int moveDuplicatesV2(int* arr, int n);
 
 int main() {
     int q_number, n;
@@ -22,11 +31,18 @@ int main() {
             printf(found_digit == -1 ? "There is no common digit" : "The common digit is: %d", found_digit);
             break;
 
-        // case 2:
-        //     printf("Enter number to return the count of ones in it's binary representation: ");
-        //     scanf("%d", &n);
-        //     printf("Number of 1s is: %d", number_of_bin_ones(n));
-        //     break;
+        case 2:
+            // printf("Enter number to return the count of ones in it's binary representation: ");
+            // scanf("%d", &n);
+
+            int arr[] = { 7, 3, 1, 2, 7, 9, 3, 2, 5, 9, 6, 2 };
+            // int arr[] = { 1, 2, 1, 3 };
+
+            int n = sizeof(arr) / sizeof(int);
+            int new_length = moveDuplicatesV1(arr, n);
+            printf("new length: %d\n", new_length);
+            print_array(arr, n);
+            break;
 
         // case 3:
         //     printf("Enter a decimal positive number to calculate the delta between the even digits and odd digits sums: ");
@@ -65,6 +81,32 @@ void swap(int *a, int *b) {
     *b += *a;
     *a = *b - *a;
     *b -= *a;
+}
+
+/*
+    Prints an array of integers
+    Parameters:
+        `arr` - An int pointer to the first element of the array
+        `n` - The length of the given array
+*/
+void print_array(int* arr, int n) {
+    printf("[");
+    for (int i = 0; i < n; i++)
+        printf(i == n-1 ? "%d" : "%d, ", arr[i]);
+    printf("]\n");
+}
+
+/*
+    Prints an array of integers
+    Parameters:
+        `arr` - An int pointer to the first element of the array
+        `n` - The length of the given array
+*/
+void print_array(int* arr, int n) {
+    printf("[");
+    for (int i = 0; i < n; i++)
+        printf(i == n-1 ? "%d" : "%d, ", arr[i]);
+    printf("]\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -117,6 +159,44 @@ void range_of_array(int* arr, int length, int *min, int *max) {
 }
 
 /*
+    Generates an array with all the numbers from `min` to `max` as indecies (including zero)
+    In each of the elements will be `1/0` that indicates whether the number is already seen in the given array or not.
+
+    Parameters:
+        `input_arr` - The array to scan
+        `n` - The length of `input_arr`
+        
+        FYI: The source variables can be uninitialized
+        `unique_count` - Pointer to an int variable that holds the count of all the unique values
+        `zero_index` - Pointer to an int variable that holds the index of the value `0` in the output array
+
+    Returns:
+        `Pointer` to the first element of the output array or 
+        `NULL` whether the memory allocation for the output array was failed.
+*/
+int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_index) {
+    int i, min, max;
+    range_of_array(input_arr, n, &min, &max);
+    *unique_count = 0; // Initializing pointer value
+    *zero_index = min < 0 ? abs(min) : 0;
+
+    int* unique_arr = (int*) calloc((max-min)+1 +1, sizeof(int));
+    if (!unique_arr)
+        return NULL;
+
+    for (i = 0; i < n; i++) {
+        // Starting the count from the minimum value
+        int val = *zero_index + input_arr[i];
+        if (!unique_arr[val]) {
+            unique_arr[val] = 1;
+            *(unique_count)++;
+        }
+    }
+
+    return unique_arr;
+}
+
+/*
     Moves the duplicates to the end of the array,
     while maintaining the order of the unique values in the array.
 
@@ -128,48 +208,39 @@ void range_of_array(int* arr, int length, int *min, int *max) {
         The count of unique elements or `-1` in case of an error.
 */
 int moveDuplicatesV1(int* arr, int n) {
-    int i, min, max, unique_count = 0;
-    int replace_index = -1;
-    range_of_array(arr, n, &min, &max);
+    int i, unique_count, zero_index, current_num, replace_index = -1;
+    int* unique_arr = NULL;
 
-    int* unique_arr = (int*) calloc((max-min)+1 +1, sizeof(int));
+    unique_arr = generate_unique_array(arr, n, &unique_count, &zero_index);
     if (!unique_arr) {
         printf("Memory allocation failed\n");
         return -1;
     }
 
-    // Generates 1 hot encoded array ("is unique")
     for (i = 0; i < n; i++) {
-        // Starting the count from the minimum value
-        int val = arr[i];
-        if (!unique_arr[val]) {
-            unique_arr[val] = 1;
-            unique_count++;
-        }
-    }
-
-    for (i = 0; i < n; i++) {
-        if (replace_index == -1 && !unique_arr[arr[i]]) {
+        current_num = arr[i];
+        if (replace_index == -1 && !unique_arr[zero_index + current_num]) {
             replace_index = i;
-        } else if (replace_index != -1 && unique_arr[arr[i]]) {
-            unique_arr[arr[i]] = 0;
+        } else if (replace_index != -1 && unique_arr[zero_index + current_num]) {
+            unique_arr[zero_index + current_num] = 0;
             swap(&arr[i], &arr[replace_index]);
             replace_index++;
             
             // Finding the next duplicate element whitin the subarray
             for (int j = replace_index; j < i; i++) {
-                if (!unique_arr[arr[j]])
-                    break;
-                
+                if (!unique_arr[zero_index + arr[j]]) break;
                 replace_index = j;
             }
         } 
         
-        if (unique_arr[arr[i]]) {
+        if (unique_arr[zero_index + current_num]) {
             // Marking the number as duplicate (because already read once)
-            unique_arr[arr[i]] = 0;
+            unique_arr[zero_index + current_num] = 0;
         }
     }
+
+    free(unique_arr);
+    unique_arr = NULL;
 
     return unique_count;
 }
