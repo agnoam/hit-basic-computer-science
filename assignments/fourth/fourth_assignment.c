@@ -12,7 +12,6 @@ void print_array(int* arr, int n);
 
 int findCommonDigit(unsigned long long n1, unsigned long long n2);
 int moveDuplicatesV1(int* arr, int n);
-void print_array(int* arr, int n);
 int moveDuplicatesV2(int* arr, int n);
 
 int main() {
@@ -65,6 +64,7 @@ int main() {
 }
 
 // Those are a "black box" functions that can be used without implementation
+
 /*
     Swaps between two integers. 
 
@@ -81,19 +81,6 @@ void swap(int *a, int *b) {
     *b += *a;
     *a = *b - *a;
     *b -= *a;
-}
-
-/*
-    Prints an array of integers
-    Parameters:
-        `arr` - An int pointer to the first element of the array
-        `n` - The length of the given array
-*/
-void print_array(int* arr, int n) {
-    printf("[");
-    for (int i = 0; i < n; i++)
-        printf(i == n-1 ? "%d" : "%d, ", arr[i]);
-    printf("]\n");
 }
 
 /*
@@ -189,7 +176,7 @@ int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_i
         int val = *zero_index + input_arr[i];
         if (!unique_arr[val]) {
             unique_arr[val] = 1;
-            *(unique_count)++;
+            *unique_count = *unique_count + 1;
         }
     }
 
@@ -233,14 +220,17 @@ int moveDuplicatesV1(int* arr, int n) {
             }
         } 
         
-        if (unique_arr[zero_index + current_num]) {
-            // Marking the number as duplicate (because already read once)
-            unique_arr[zero_index + current_num] = 0;
-        }
+        // Marking the number as duplicate (because already read once)
+        unique_arr[zero_index + current_num] = 0;
     }
 
     free(unique_arr);
     unique_arr = NULL;
 
     return unique_count;
+}
+
+
+int moveDuplicatesV2(int* arr, int n) {
+
 }
