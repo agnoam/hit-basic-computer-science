@@ -38,7 +38,8 @@ int main() {
             // int arr[] = { 1, 2, 1, 3 };
 
             int n = sizeof(arr) / sizeof(int);
-            int new_length = moveDuplicatesV1(arr, n);
+            // int new_length = moveDuplicatesV1(arr, n);
+            int new_length = moveDuplicatesV2(arr, n);
             printf("new length: %d\n", new_length);
             print_array(arr, n);
             break;
@@ -69,18 +70,13 @@ int main() {
     Swaps between two integers. 
 
     Parameters:
-        `a` - First pointer to to swap (could not be null)
-        `b` - Second pointer to swap (could not be null)
+        `a` - First pointer to to swap
+        `b` - Second pointer to swap
 */
-void swap(int *a, int *b) {
-    if (!a || !b) {
-        printf("Can not swap with null");
-        return;
-    }
-
-    *b += *a;
-    *a = *b - *a;
-    *b -= *a;
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 /*
@@ -94,6 +90,65 @@ void print_array(int* arr, int n) {
     for (int i = 0; i < n; i++)
         printf(i == n-1 ? "%d" : "%d, ", arr[i]);
     printf("]\n");
+}
+
+int partition(int* arr, int low, int high) {
+    // Initialize pivot to be the first element
+    int p = arr[low];
+    int i = low;
+    int j = high;
+
+    while (i < j) {
+
+        // Find the first element greater than
+        // the pivot (from starting)
+        while (arr[i] <= p && i <= high - 1) {
+            i++;
+        }
+
+        // Find the first element smaller than
+        // the pivot (from last)
+        while (arr[j] > p && j >= low + 1) {
+            j--;
+        }
+        if (i < j) {
+            swap(&arr[i], &arr[j]);
+        }
+    }
+
+    swap(&arr[low], &arr[j]);
+    return j;
+}
+
+void quick_sort(int* arr, int low, int high) {
+    if (low < high) {
+        // call partition function to find Partition Index
+        int pi = partition(arr, low, high);
+
+        // Recursively call quick_sort() for left and right
+        // half based on Partition Index
+        quick_sort(arr, low, pi - 1);
+        quick_sort(arr, pi + 1, high);
+    }
+}
+
+// Binary Search Function
+int binary_search(int* array, int size, int target) {
+    int low = 0, high = size - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2; // To prevent potential overflow
+
+        if (array[mid] == target) {
+            return mid; // Target found at index mid
+        } else if (array[mid] < target) {
+            low = mid + 1; // Search the right half
+        } else {
+            high = mid - 1; // Search the left half
+        }
+    }
+
+    return -1; // Target not found
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -230,7 +285,163 @@ int moveDuplicatesV1(int* arr, int n) {
     return unique_count;
 }
 
+/*
+    Duplicates an integer array
+    
+    Parameters:
+        `arr` - The integer array to duplicate
+        `n` - The length of the array
+
+    Returns:
+        Pointer to the new duplicated array or 
+        `NULL` in case of allocation error
+*/
+int* duplicate_arr(int* arr, int n) {
+    int i;
+    int* dup = malloc(n * sizeof(int));
+
+    if (dup) {
+        for (i = 0; i < n; i++)
+            dup[i] = arr[i];
+    }
+
+    return dup;
+}
+
+/*
+    Takes sorted integer array and creates new array with unique values only
+    Parameters:
+        `arr`: The array to remove the duplicates from
+        `n`: The length of the array
+        `unique_arr_length`: The new length of the output array
+
+    Returns:
+        New array with unique values only, in case of failure the function will return `NULL`
+*/
+int* remove_duplicates(int* arr, int n, int* unique_arr_length) {
+    int i, last_value, last_inserted_i = 0, unique_count = 0;
+    int* unique_arr = NULL;
+
+    // Counting the unique values
+    for (i = 0; i < n; i++) {
+        if (i == 0 || arr[i] != last_value) {
+            unique_count++;
+            last_value = arr[i];
+        }
+    }
+
+    // Inserting the values 
+    unique_arr = calloc(unique_count, sizeof(int));
+    if (unique_arr) {
+        for (i = 0; i < n; i++) {
+            if (i == 0 || arr[i] != last_value) {
+                unique_arr[last_inserted_i] = arr[i];
+                last_value = arr[i];
+                last_inserted_i++;
+            }
+        }
+
+        *unique_arr_length = unique_count;
+    }
+
+    return unique_arr;
+}
+
+
+int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
+    /*
+        TODO: The array should contain the already seen elements 
+        e.g. for the input array: [7, 3_, 1_, 2_, 7, 9, 3_, 2_, 5_, 9, 6_, 2_]
+        the output array will be: [1, 2, 3, 5, 6, 7, 9]
+    */
+    int* duplicate;
+    int* unique_arr;
+
+    duplicate = duplicate_arr(input_arr, n);
+    if (!duplicate) {
+        printf("Memory allocation error!");
+        return duplicate;
+    }
+
+    printf("input_arr: ");
+    print_array(input_arr, n);
+    printf("duplicate: ");
+    print_array(duplicate, n);
+
+    // Sorting the whole array
+    quick_sort(duplicate, 0, n-1);
+
+    printf("sorted duplicate: ");
+    print_array(duplicate, n);
+
+    unique_arr = remove_duplicates(duplicate, n, count);
+
+    printf("unique_arr: ");
+    print_array(unique_arr, *count);
+
+
+    free(duplicate);
+    duplicate = NULL;
+    return unique_arr; // Could be null as well
+}
+
+/*
+    Removes an element from an integer array
+
+    Parameters:
+        `arr` - The array to modify
+        `n` - The current length of the array
+
+    Returns the new length of the array after the change
+*/
+int remove_element(int* arr, int index_to_remove, int length) {
+    int i;
+    
+    if (length < 1)
+        return length;
+
+    for(i = index_to_remove; i < length - 1; i++) 
+        arr[i] = arr[i + 1];
+}
+
 
 int moveDuplicatesV2(int* arr, int n) {
+    int i, unique_count, current_num, found_index, replace_index = -1;
+    int* unique_arr = NULL;
 
+    unique_arr = generate_sorted_unique_array(arr, n, &unique_count);
+    if (!unique_arr) {
+        printf("Memory allocation failed\n");
+        return -1;
+    }
+
+    for (i = 0; i < n; i++) {
+        current_num = arr[i];
+        found_index = binary_search(unique_arr, unique_count, current_num);
+
+        if (replace_index == -1 && found_index == -1) {
+            replace_index = i;
+        } else if (replace_index != -1 && found_index != -1) {
+            unique_count = remove_element(unique_arr, found_index, unique_count);
+            swap(&arr[i], &arr[replace_index]);
+            replace_index++;
+            
+            // Finding the next duplicate element whitin the subarray
+            for (int j = replace_index; j < i; i++) {
+                if (binary_search(unique_arr, unique_count, arr[j]) == -1) break;
+                replace_index = j;
+            }
+        } else if (found_index != -1) {
+            unique_count = remove_element(unique_arr, found_index, unique_count);
+        }
+        
+        printf("new unique_arr: ");
+        print_array(unique_arr, unique_count);
+        printf("rearrenged arr: ");
+        print_array(arr, n);
+    }
+
+    free(unique_arr);
+    unique_arr = NULL;
+    return unique_count;
 }
