@@ -404,12 +404,23 @@ int remove_element(int* arr, int index_to_remove, int length) {
         arr[i] = arr[i + 1];
 }
 
+/*
+    Moves the duplicates to the end of the array,
+    while maintaining the order of the unique values in the array.
 
+    Parameters:
+        `arr`: Pointer to the first element of the array
+        `n`: The length of the array
+
+    Returns:
+        The count of unique elements or `-1` in case of an error.
+*/
 int moveDuplicatesV2(int* arr, int n) {
-    int i, unique_count, current_num, found_index, replace_index = -1;
+    int i, unique_count, original_unique_count, current_num, found_index, replace_index = -1;
     int* unique_arr = NULL;
 
     unique_arr = generate_sorted_unique_array(arr, n, &unique_count);
+    original_unique_count = unique_count;
     if (!unique_arr) {
         printf("Memory allocation failed\n");
         return -1;
@@ -434,14 +445,9 @@ int moveDuplicatesV2(int* arr, int n) {
         } else if (found_index != -1) {
             unique_count = remove_element(unique_arr, found_index, unique_count);
         }
-        
-        printf("new unique_arr: ");
-        print_array(unique_arr, unique_count);
-        printf("rearrenged arr: ");
-        print_array(arr, n);
     }
 
     free(unique_arr);
     unique_arr = NULL;
-    return unique_count;
+    return original_unique_count;
 }
