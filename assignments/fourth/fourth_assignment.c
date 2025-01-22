@@ -92,6 +92,19 @@ void print_array(int* arr, int n) {
     printf("]\n");
 }
 
+/*
+    Partitions the array around a pivot element.
+
+    Parameters:
+        `arr` - Pointer to the array to be partitioned.
+        `low` - Starting index of the array segment.
+        `high` - Ending index of the array segment.
+
+    Returns:
+        The partition index (`j`), where all elements to the left of `j` 
+        are less than or equal to the pivot, and all elements to the right 
+        of `j` are greater than the pivot.
+*/
 int partition(int* arr, int low, int high) {
     // Initialize pivot to be the first element
     int p = arr[low];
@@ -120,6 +133,15 @@ int partition(int* arr, int low, int high) {
     return j;
 }
 
+
+/*
+    Sorts an array in ascending order using the Quick Sort algorithm.
+
+    Parameters:
+        `arr` - Pointer to the array to be sorted.
+        `low` - Starting index of the array segment.
+        `high` - Ending index of the array segment.
+*/
 void quick_sort(int* arr, int low, int high) {
     if (low < high) {
         // call partition function to find Partition Index
@@ -132,7 +154,18 @@ void quick_sort(int* arr, int low, int high) {
     }
 }
 
-// Binary Search Function
+/*
+    Searches for a target value in a sorted array using the Binary Search algorithm.
+
+    Parameters:
+        `array` - Pointer to the sorted array.
+        `size` - Size of the array.
+        `target` - The value to be searched for.
+
+    Returns:
+        If the target is found, the function returns its index in the array.
+        Otherwise, it returns `-1`.
+*/
 int binary_search(int* array, int size, int target) {
     int low = 0, high = size - 1;
 
@@ -347,13 +380,22 @@ int* remove_duplicates(int* arr, int n, int* unique_arr_length) {
     return unique_arr;
 }
 
+/*
+    Generates an array of all the unique values from the `input_array` sorted accending order
 
+    Parameters:
+        `input_arr` - The input array to scan
+        `n` - The length of the `input_arr`
+        `count` - The length of the output array
+
+    Returns:
+        A pointer to the first element of the array or `NULL` in case of an error.
+
+    Example:
+        input array: [7, 3, 1, 2, 7, 9, 3, 2, 5, 9, 6, 2]
+        output array: [1, 2, 3, 5, 6, 7, 9]
+*/
 int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
-    /*
-        TODO: The array should contain the already seen elements 
-        e.g. for the input array: [7, 3_, 1_, 2_, 7, 9, 3_, 2_, 5_, 9, 6_, 2_]
-        the output array will be: [1, 2, 3, 5, 6, 7, 9]
-    */
     int* duplicate;
     int* unique_arr;
 
@@ -363,22 +405,9 @@ int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
         return duplicate;
     }
 
-    printf("input_arr: ");
-    print_array(input_arr, n);
-    printf("duplicate: ");
-    print_array(duplicate, n);
-
     // Sorting the whole array
     quick_sort(duplicate, 0, n-1);
-
-    printf("sorted duplicate: ");
-    print_array(duplicate, n);
-
     unique_arr = remove_duplicates(duplicate, n, count);
-
-    printf("unique_arr: ");
-    print_array(unique_arr, *count);
-
 
     free(duplicate);
     duplicate = NULL;
@@ -392,7 +421,8 @@ int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
         `arr` - The array to modify
         `n` - The current length of the array
 
-    Returns the new length of the array after the change
+    Returns:
+        The new length of the array after the change
 */
 int remove_element(int* arr, int index_to_remove, int length) {
     int i;
