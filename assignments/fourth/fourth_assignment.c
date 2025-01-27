@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
+#include <string.h>
 
 
 // Black box functions declarations
@@ -12,7 +13,8 @@ void print_array(int* arr, int n);
 
 int findCommonDigit(unsigned long long n1, unsigned long long n2);
 int moveDuplicatesV1(int* arr, int n);
-int moveDuplicatesV2(int* arr, int n);
+int moveDuplicatesV2(int* arr, int n); 
+int stringPermutation(char* str);
 
 int main() {
     int q_number, n;
@@ -77,6 +79,20 @@ void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
+}
+
+void swap_generic(void *a, void *b, size_t size) {
+    void *temp = malloc(size);  // Allocate memory for a temporary buffer
+    if (temp == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return;
+    }
+
+    memcpy(temp, a, size);  // Copy the contents of 'a' to 'temp'
+    memcpy(a, b, size);     // Copy the contents of 'b' to 'a'
+    memcpy(b, temp, size);  // Copy the contents of 'temp' to 'b'
+
+    free(temp);  // Free the temporary buffer
 }
 
 /*
@@ -480,4 +496,60 @@ int moveDuplicatesV2(int* arr, int n) {
     free(unique_arr);
     unique_arr = NULL;
     return original_unique_count;
+}
+
+void next_permutation(char *substr) {
+    int pivot_index = -1, length = strlen(substr);
+    char pivot;
+    
+    // Duplicates the substring
+    char* duplicate = malloc((length + 1) * sizeof(char));
+    strcpy(duplicate, substr);
+
+    // Find the correct place for the pivot char
+    pivot = duplicate[0];
+    char temp = 0;
+
+    for (int i = length - 1; i >= 0; i--) {
+        if (pivot < duplicate[i] && !temp) {
+            temp = duplicate[i];
+            duplicate[i] = pivot;
+            pivot_index = i;
+        } else if (temp) {
+            swap_generic(&temp, &duplicate[i], sizeof(char));
+        }
+    }
+
+    // Updating the pivot index
+    pivot_index = !pivot_index ? pivot_index : pivot_index - 1;
+    pivot = duplicate[pivot_index];
+    swap_generic(&duplicate[pivot_index], &duplicate[pivot_index-1], sizeof(char));
+
+    // Rearrenge the substring according to the duplicate
+    for (int i = 0; i < length; i++){
+        if (!i) 
+            substr[i] = pivot;
+        else if (duplicate[length - i] != pivot)
+            substr[i] = duplicate[length - i];
+    }
+
+    free(duplicate);
+}
+
+int stringPermutation(char *str) {
+    int i, length = strlen(str);
+
+    for (i = length - 1; i >= 1; i--) {
+        // Find the pivot
+        if (str[i-1] > str[i])
+            continue;
+
+        // Get substring
+        printf("string before change: %s\n", str);
+        next_permutation(&str[i-1]);
+        printf("string after change: %s\n", str);
+        return 1;
+    }
+
+    return 0;
 }
