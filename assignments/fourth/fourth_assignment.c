@@ -4,17 +4,13 @@
 #include <math.h>
 #include <string.h>
 
-
-// Black box functions declarations
-
 void print_array(int* arr, int n);
-
-//////////////////////////////////////
 
 int findCommonDigit(unsigned long long n1, unsigned long long n2);
 int moveDuplicatesV1(int* arr, int n);
 int moveDuplicatesV2(int* arr, int n); 
 int stringPermutation(char* str);
+int validateArray(int* arr, int n);
 
 int main() {
     int q_number, n;
@@ -33,11 +29,7 @@ int main() {
             break;
 
         case 2:
-            // printf("Enter number to return the count of ones in it's binary representation: ");
-            // scanf("%d", &n);
-
             int arr[] = { 7, 3, 1, 2, 7, 9, 3, 2, 5, 9, 6, 2 };
-            // int arr[] = { 1, 2, 1, 3 };
 
             int n = sizeof(arr) / sizeof(int);
             // int new_length = moveDuplicatesV1(arr, n);
@@ -46,17 +38,22 @@ int main() {
             print_array(arr, n);
             break;
 
-        // case 3:
-        //     printf("Enter a decimal positive number to calculate the delta between the even digits and odd digits sums: ");
-        //     scanf("%d", &n);
-        //     printf("The delta is: %d", diff(n));
-        //     break;
+        case 3:
+            char str[100] = "abdc";
+            int is_changed = stringPermutation(str);
+            printf("is_changed: %d", is_changed);
+            if (is_changed)
+                printf("source string changed: %s\n", str);
 
-        // case 4:
-        //     printf("Enter the length of the input list: ");
-        //     scanf("%d", &n);
-        //     bigger_rev(n);
-        //     break;
+            break;
+
+        case 4:
+           
+            int num_arr[] = { 1, 2, 3, 0, 4, 5 };
+            printf("is validated: %d", validateArray(num_arr, sizeof(num_arr) / sizeof(int)));
+            int arr_2[] = { 1, 2, 1, 0, 4, 5 };
+            printf("is validated: %d", validateArray(arr_2, sizeof(arr_2) / sizeof(int)));
+            break;
 
         default:
             printf("Invalid question number");
@@ -68,7 +65,7 @@ int main() {
 
 // Those are a "black box" functions that can be used without implementation
 
-/*
+/**
     Swaps between two integers. 
 
     Parameters:
@@ -81,22 +78,9 @@ void swap(int* a, int* b) {
     *b = temp;
 }
 
-void swap_generic(void *a, void *b, size_t size) {
-    void *temp = malloc(size);  // Allocate memory for a temporary buffer
-    if (temp == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        return;
-    }
-
-    memcpy(temp, a, size);  // Copy the contents of 'a' to 'temp'
-    memcpy(a, b, size);     // Copy the contents of 'b' to 'a'
-    memcpy(b, temp, size);  // Copy the contents of 'temp' to 'b'
-
-    free(temp);  // Free the temporary buffer
-}
-
-/*
+/**
     Prints an array of integers
+
     Parameters:
         `arr` - An int pointer to the first element of the array
         `n` - The length of the given array
@@ -108,7 +92,7 @@ void print_array(int* arr, int n) {
     printf("]\n");
 }
 
-/*
+/**
     Partitions the array around a pivot element.
 
     Parameters:
@@ -149,8 +133,7 @@ int partition(int* arr, int low, int high) {
     return j;
 }
 
-
-/*
+/**
     Sorts an array in ascending order using the Quick Sort algorithm.
 
     Parameters:
@@ -170,7 +153,7 @@ void quick_sort(int* arr, int low, int high) {
     }
 }
 
-/*
+/**
     Searches for a target value in a sorted array using the Binary Search algorithm.
 
     Parameters:
@@ -202,7 +185,7 @@ int binary_search(int* array, int size, int target) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-/*
+/**
     Finds the common digits between `n1` and `n2`.
     
     Parameters:
@@ -228,7 +211,7 @@ int findCommonDigit(unsigned long long n1, unsigned long long n2) {
     return n1 % 10;
 }
 
-/*
+/**
     Returns the `min` and `max` values within the given array.
 
     Parameters:
@@ -249,7 +232,7 @@ void range_of_array(int* arr, int length, int *min, int *max) {
     }
 }
 
-/*
+/**
     Generates an array with all the numbers from `min` to `max` as indecies (including zero)
     In each of the elements will be `1/0` that indicates whether the number is already seen in the given array or not.
 
@@ -287,7 +270,7 @@ int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_i
     return unique_arr;
 }
 
-/*
+/**
     Moves the duplicates to the end of the array,
     while maintaining the order of the unique values in the array.
 
@@ -334,7 +317,7 @@ int moveDuplicatesV1(int* arr, int n) {
     return unique_count;
 }
 
-/*
+/**
     Duplicates an integer array
     
     Parameters:
@@ -357,7 +340,7 @@ int* duplicate_arr(int* arr, int n) {
     return dup;
 }
 
-/*
+/**
     Takes sorted integer array and creates new array with unique values only
     Parameters:
         `arr`: The array to remove the duplicates from
@@ -396,7 +379,7 @@ int* remove_duplicates(int* arr, int n, int* unique_arr_length) {
     return unique_arr;
 }
 
-/*
+/**
     Generates an array of all the unique values from the `input_array` sorted accending order
 
     Parameters:
@@ -430,7 +413,7 @@ int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
     return unique_arr; // Could be null as well
 }
 
-/*
+/**
     Removes an element from an integer array
 
     Parameters:
@@ -450,7 +433,7 @@ int remove_element(int* arr, int index_to_remove, int length) {
         arr[i] = arr[i + 1];
 }
 
-/*
+/**
     Moves the duplicates to the end of the array,
     while maintaining the order of the unique values in the array.
 
@@ -498,7 +481,7 @@ int moveDuplicatesV2(int* arr, int n) {
     return original_unique_count;
 }
 
-/*
+/**
     Swap between two characters
 
     Parameters:
@@ -511,7 +494,7 @@ void swap_str(char* a, char* b) {
     *b = temp;
 }
 
-/*
+/**
     Reversing the order of the string array
 
     Parameters:
@@ -526,7 +509,7 @@ void reverse(char* start_i, char* end_i) {
     }
 }
 
-/*
+/**
     Replaces the string with the next bigger lexicographic permutation string
 
     Parameters:
@@ -558,4 +541,36 @@ int stringPermutation(char *str) {
     }
 
     return 0;
+}
+
+/**
+    Validates whether the given array is contains all the possible values between (0 -> n-1)
+    
+    (Note: This funciton modifies the original order of the given array
+    FYI: This function assumes the input array values are non-negative 
+    and within the valid range. Behavior is undefined otherwise.)
+
+    Parameters:
+        `arr` - Pointer to the first element of the integer array to be validated
+        `n` - Size of the array.
+ 
+    Returns:
+        `1` if the array is valid (no duplicates and can be rearranged),
+        or `0` if a duplicate is found.
+*/
+int validateArray(int* arr, int n) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == i)
+            continue;
+
+        do {
+            // Found duplicate
+            if (arr[arr[i]] == arr[i])
+                return 0;
+
+            swap(&arr[i], &arr[arr[i]]);
+        } while(arr[i] != i);
+    }
+
+    return 1;
 }
