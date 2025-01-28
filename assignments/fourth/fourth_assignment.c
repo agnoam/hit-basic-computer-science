@@ -498,56 +498,62 @@ int moveDuplicatesV2(int* arr, int n) {
     return original_unique_count;
 }
 
-void next_permutation(char *substr) {
-    int pivot_index = -1, length = strlen(substr);
-    char pivot;
-    
-    // Duplicates the substring
-    char* duplicate = malloc((length + 1) * sizeof(char));
-    strcpy(duplicate, substr);
+/*
+    Swap between two characters
 
-    // Find the correct place for the pivot char
-    pivot = duplicate[0];
-    char temp = 0;
-
-    for (int i = length - 1; i >= 0; i--) {
-        if (pivot < duplicate[i] && !temp) {
-            temp = duplicate[i];
-            duplicate[i] = pivot;
-            pivot_index = i;
-        } else if (temp) {
-            swap_generic(&temp, &duplicate[i], sizeof(char));
-        }
-    }
-
-    // Updating the pivot index
-    pivot_index = !pivot_index ? pivot_index : pivot_index - 1;
-    pivot = duplicate[pivot_index];
-    swap_generic(&duplicate[pivot_index], &duplicate[pivot_index-1], sizeof(char));
-
-    // Rearrenge the substring according to the duplicate
-    for (int i = 0; i < length; i++){
-        if (!i) 
-            substr[i] = pivot;
-        else if (duplicate[length - i] != pivot)
-            substr[i] = duplicate[length - i];
-    }
-
-    free(duplicate);
+    Parameters:
+        `a` - Pointer to the first character to swap
+        `b` - Pointer to the second character to swap
+*/
+void swap_str(char* a, char* b) {
+    char temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
+/*
+    Reversing the order of the string array
+
+    Parameters:
+        `start_i` - The starting index of reversing
+        `end_i` - The ending index of the reversing
+*/
+void reverse(char* start_i, char* end_i) {
+    while (start_i != end_i && start_i && end_i) {
+        swap_str(start_i, end_i);
+        start_i++;
+        end_i--;
+    }
+}
+
+/*
+    Replaces the string with the next bigger lexicographic permutation string
+
+    Parameters:
+        `str` - Pointer to the first element of the string
+
+    Returns:
+        In case the string changed returned `1` else `0`
+*/
 int stringPermutation(char *str) {
-    int i, length = strlen(str);
+    int i, j, length = strlen(str);
 
     for (i = length - 1; i >= 1; i--) {
-        // Find the pivot
-        if (str[i-1] > str[i])
+        // Find the pivot (The first element that is smaller than the one before)
+        if (str[i-1] >= str[i])
             continue;
 
-        // Get substring
-        printf("string before change: %s\n", str);
-        next_permutation(&str[i-1]);
-        printf("string after change: %s\n", str);
+        // Searching the right placement for the pivot
+        for (j = i-1; j > 0; j--) {
+            if (str[j] > str[i-1])
+                break;
+        }
+        
+        // Swap characters at i-1 and j
+        swap_str(&str[i-1], &str[j]);
+        
+        // Reverse from the second position until the end of the string
+        reverse(&str[i-1], &str[length - 1]);
         return 1;
     }
 
