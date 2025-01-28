@@ -48,7 +48,6 @@ int main() {
             break;
 
         case 4:
-           
             int num_arr[] = { 1, 2, 3, 0, 4, 5 };
             printf("is validated: %d", validateArray(num_arr, sizeof(num_arr) / sizeof(int)));
             int arr_2[] = { 1, 2, 1, 0, 4, 5 };
@@ -271,214 +270,76 @@ int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_i
 }
 
 /**
-    Moves the duplicates to the end of the array,
-    while maintaining the order of the unique values in the array.
+    Moves duplicates to the end of the array while maintaining the order of unique elements.
 
     Parameters:
-        `arr`: Pointer to the first element of the array
-        `n`: The length of the array
+        `arr` - Pointer to the first element of the array
+        `n` - The length of the array
 
     Returns:
-        The count of unique elements or `-1` in case of an error.
+        The count of unique elements or -1 if an error occurs.
 */
 int moveDuplicatesV1(int* arr, int n) {
-    int i, unique_count, zero_index, current_num, replace_index = -1;
-    int* unique_arr = NULL;
-
-    unique_arr = generate_unique_array(arr, n, &unique_count, &zero_index);
+    int unique_count, zero_index;
+    int* unique_arr = generate_unique_array(arr, n, &unique_count, &zero_index);
     if (!unique_arr) {
         printf("Memory allocation failed\n");
         return -1;
     }
 
-    for (i = 0; i < n; i++) {
-        current_num = arr[i];
-        if (replace_index == -1 && !unique_arr[zero_index + current_num]) {
-            replace_index = i;
-        } else if (replace_index != -1 && unique_arr[zero_index + current_num]) {
-            unique_arr[zero_index + current_num] = 0;
-            swap(&arr[i], &arr[replace_index]);
+    int replace_index = 0; // Tracks where the next duplicate should go
+    for (int i = 0; i < n; i++) {
+        int val = arr[i] + zero_index;
+        if (unique_arr[val]) {
+            // Keep unique elements at the start of the array
+            if (i != replace_index)
+                swap(&arr[i], &arr[replace_index]);
+
             replace_index++;
-            
-            // Finding the next duplicate element whitin the subarray
-            for (int j = replace_index; j < i; i++) {
-                if (!unique_arr[zero_index + arr[j]]) break;
-                replace_index = j;
-            }
-        } 
-        
-        // Marking the number as duplicate (because already read once)
-        unique_arr[zero_index + current_num] = 0;
+            unique_arr[val] = 0; // Mark as processed
+        }
     }
 
     free(unique_arr);
-    unique_arr = NULL;
-
     return unique_count;
 }
 
 /**
-    Duplicates an integer array
-    
+    Moves duplicates to the end of the array while maintaining the order of unique elements.
+
     Parameters:
-        `arr` - The integer array to duplicate
+        `arr` - Pointer to the first element of the array
         `n` - The length of the array
 
     Returns:
-        Pointer to the new duplicated array or 
-        `NULL` in case of allocation error
+        The count of unique elements or -1 if an error occurs.
 */
-int* duplicate_arr(int* arr, int n) {
-    int i;
-    int* dup = malloc(n * sizeof(int));
+int moveDuplicatesV2(int* a, int n) {
+    int index = 0, non_duplicate = 0, i = 0;
+    int* seen = (int*) calloc(1000, sizeof(int));
 
-    if (dup) {
-        for (i = 0; i < n; i++)
-            dup[i] = arr[i];
-    }
-
-    return dup;
-}
-
-/**
-    Takes sorted integer array and creates new array with unique values only
-    Parameters:
-        `arr`: The array to remove the duplicates from
-        `n`: The length of the array
-        `unique_arr_length`: The new length of the output array
-
-    Returns:
-        New array with unique values only, in case of failure the function will return `NULL`
-*/
-int* remove_duplicates(int* arr, int n, int* unique_arr_length) {
-    int i, last_value, last_inserted_i = 0, unique_count = 0;
-    int* unique_arr = NULL;
-
-    // Counting the unique values
+    // Filling the seen array with each of the values
     for (i = 0; i < n; i++) {
-        if (i == 0 || arr[i] != last_value) {
-            unique_count++;
-            last_value = arr[i];
-        }
-    }
+        if (!seen[a[i]])
+            a[index++] = a[i];
 
-    // Inserting the values 
-    unique_arr = calloc(unique_count, sizeof(int));
-    if (unique_arr) {
-        for (i = 0; i < n; i++) {
-            if (i == 0 || arr[i] != last_value) {
-                unique_arr[last_inserted_i] = arr[i];
-                last_value = arr[i];
-                last_inserted_i++;
-            }
-        }
-
-        *unique_arr_length = unique_count;
-    }
-
-    return unique_arr;
-}
-
-/**
-    Generates an array of all the unique values from the `input_array` sorted accending order
-
-    Parameters:
-        `input_arr` - The input array to scan
-        `n` - The length of the `input_arr`
-        `count` - The length of the output array
-
-    Returns:
-        A pointer to the first element of the array or `NULL` in case of an error.
-
-    Example:
-        input array: [7, 3, 1, 2, 7, 9, 3, 2, 5, 9, 6, 2]
-        output array: [1, 2, 3, 5, 6, 7, 9]
-*/
-int* generate_sorted_unique_array(int* input_arr, int n, int* count) {
-    int* duplicate;
-    int* unique_arr;
-
-    duplicate = duplicate_arr(input_arr, n);
-    if (!duplicate) {
-        printf("Memory allocation error!");
-        return duplicate;
-    }
-
-    // Sorting the whole array
-    quick_sort(duplicate, 0, n-1);
-    unique_arr = remove_duplicates(duplicate, n, count);
-
-    free(duplicate);
-    duplicate = NULL;
-    return unique_arr; // Could be null as well
-}
-
-/**
-    Removes an element from an integer array
-
-    Parameters:
-        `arr` - The array to modify
-        `n` - The current length of the array
-
-    Returns:
-        The new length of the array after the change
-*/
-int remove_element(int* arr, int index_to_remove, int length) {
-    int i;
-    
-    if (length < 1)
-        return length;
-
-    for(i = index_to_remove; i < length - 1; i++) 
-        arr[i] = arr[i + 1];
-}
-
-/**
-    Moves the duplicates to the end of the array,
-    while maintaining the order of the unique values in the array.
-
-    Parameters:
-        `arr`: Pointer to the first element of the array
-        `n`: The length of the array
-
-    Returns:
-        The count of unique elements or `-1` in case of an error.
-*/
-int moveDuplicatesV2(int* arr, int n) {
-    int i, unique_count, original_unique_count, current_num, found_index, replace_index = -1;
-    int* unique_arr = NULL;
-
-    unique_arr = generate_sorted_unique_array(arr, n, &unique_count);
-    original_unique_count = unique_count;
-    if (!unique_arr) {
-        printf("Memory allocation failed\n");
-        return -1;
+        seen[a[i]]++; 
     }
 
     for (i = 0; i < n; i++) {
-        current_num = arr[i];
-        found_index = binary_search(unique_arr, unique_count, current_num);
-
-        if (replace_index == -1 && found_index == -1) {
-            replace_index = i;
-        } else if (replace_index != -1 && found_index != -1) {
-            unique_count = remove_element(unique_arr, found_index, unique_count);
-            swap(&arr[i], &arr[replace_index]);
-            replace_index++;
-            
-            // Finding the next duplicate element whitin the subarray
-            for (int j = replace_index; j < i; i++) {
-                if (binary_search(unique_arr, unique_count, arr[j]) == -1) break;
-                replace_index = j;
-            }
-        } else if (found_index != -1) {
-            unique_count = remove_element(unique_arr, found_index, unique_count);
+        if (seen[a[i]] > 1) {
+            a[index] = a[i];
+            index += 1;
+            non_duplicate ++;
+            seen[a[i]] = 1;
         }
     }
 
-    free(unique_arr);
-    unique_arr = NULL;
-    return original_unique_count;
+    free(seen);
+    seen = NULL;
+
+    non_duplicate = n - (non_duplicate * 2);
+    return non_duplicate;
 }
 
 /**
