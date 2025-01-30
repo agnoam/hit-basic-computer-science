@@ -39,9 +39,10 @@ int main() {
             break;
 
         case 3:
-            char str[100] = "abdc";
+            char str[100] = "abdc"; // => "acbd"
             int is_changed = stringPermutation(str);
-            printf("is_changed: %d", is_changed);
+            
+            printf("is_changed: %d\n", is_changed);
             if (is_changed)
                 printf("source string changed: %s\n", str);
 
@@ -75,20 +76,6 @@ void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
-}
-
-/**
-    Prints an array of integers
-
-    Parameters:
-        `arr` - An int pointer to the first element of the array
-        `n` - The length of the given array
-*/
-void print_array(int* arr, int n) {
-    printf("[");
-    for (int i = 0; i < n; i++)
-        printf(i == n-1 ? "%d" : "%d, ", arr[i]);
-    printf("]\n");
 }
 
 /**
@@ -182,18 +169,62 @@ int binary_search(int* array, int size, int target) {
     return -1; // Target not found
 }
 
+/**
+ * Find the left-most (lower bound) index of specific target (element)
+ * 
+ * @param arr A sorted integers array to search in
+ * @param n The size of the array (elements count)
+ * @param target The element to search for
+ * 
+ * @returns The left most element index of the target element or `-1` if no such element found
+ */
+int binary_search_left(int arr[], int n, int target) {
+    int low = 0, high = n - 1;
+    int result = -1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (abs(arr[mid]) == target) {
+            result = mid;
+            high = mid - 1;
+        } else if (abs(arr[mid]) < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return result;
+}
+
 /////////////////////////////////////////////////////////////////////////////
+// Utils
+
+/**
+    Prints an array of integers
+
+    Parameters:
+        `arr` - An int pointer to the first element of the array
+        `n` - The length of the given array
+*/
+void print_array(int* arr, int n) {
+    printf("[");
+    for (int i = 0; i < n; i++)
+        printf(i == n-1 ? "%d" : "%d, ", arr[i]);
+    printf("]\n");
+}
+
+////////////////////////////////////////////////////////////////////////////
 
 /**
     Finds the common digits between `n1` and `n2`.
     
-    Parameters:
-        `n1` - Very long number
-        `n2` - Another very long number 
+    @param n1 Very long number
+    @param n2 Another very long number 
     
-    Returns:
-        In case there is a common digit, the function will return it.
-        Otherwise it will return `-1`.
+    @returns In case there is a common digit, the function will return it.
+    Otherwise it will return `-1`.
 */
 int findCommonDigit(unsigned long long n1, unsigned long long n2) {
     if (!n1) 
@@ -213,11 +244,10 @@ int findCommonDigit(unsigned long long n1, unsigned long long n2) {
 /**
     Returns the `min` and `max` values within the given array.
 
-    Parameters:
-        `arr` - Pointer to the first element of the array
-        `length` - Length of the array
-        `min` - Minimum value of the array (assumed uninitialized)
-        `max` - Maximum value of the array (assumed uninitialized)
+    @param arr Pointer to the first element of the array
+    @param length Length of the array
+    @param min Minimum value of the array (assumed uninitialized)
+    @param max Maximum value of the array (assumed uninitialized)
 */
 void range_of_array(int* arr, int length, int *min, int *max) {
     int i;
@@ -235,17 +265,14 @@ void range_of_array(int* arr, int length, int *min, int *max) {
     Generates an array with all the numbers from `min` to `max` as indecies (including zero)
     In each of the elements will be `1/0` that indicates whether the number is already seen in the given array or not.
 
-    Parameters:
-        `input_arr` - The array to scan
-        `n` - The length of `input_arr`
+    @param input_arr The array to scan
+    @param n The length of `input_arr`
         
-        FYI: The source variables can be uninitialized
-        `unique_count` - Pointer to an int variable that holds the count of all the unique values
-        `zero_index` - Pointer to an int variable that holds the index of the value `0` in the output array
+    FYI: The referenced variables can be uninitialized
+    @param unique_count Pointer to an int variable that holds the count of all the unique values
+    @param zero_index Pointer to an int variable that holds the index of the value `0` in the output array
 
-    Returns:
-        `Pointer` to the first element of the output array or 
-        `NULL` whether the memory allocation for the output array was failed.
+    @returns `Pointer` to the first element of the output array or `NULL` whether the memory allocation for the output array was failed.
 */
 int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_index) {
     int i, min, max;
@@ -253,7 +280,7 @@ int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_i
     *unique_count = 0; // Initializing pointer value
     *zero_index = min < 0 ? abs(min) : 0;
 
-    int* unique_arr = (int*) calloc((max-min)+1 +1, sizeof(int));
+    int* unique_arr = (int*) calloc((max-min) + 1, sizeof(int));
     if (!unique_arr)
         return NULL;
 
@@ -272,12 +299,11 @@ int* generate_unique_array(int* input_arr, int n, int* unique_count, int* zero_i
 /**
     Moves duplicates to the end of the array while maintaining the order of unique elements.
 
-    Parameters:
-        `arr` - Pointer to the first element of the array
-        `n` - The length of the array
+    @param arr Pointer to the first element of the array 
+    (each element should not be greater the `n` and smaller than `-n`)
+    @param n The length of the array
 
-    Returns:
-        The count of unique elements or -1 if an error occurs.
+    @returns The count of unique elements or -1 if an error occurs.
 */
 int moveDuplicatesV1(int* arr, int n) {
     int unique_count, zero_index;
@@ -305,49 +331,73 @@ int moveDuplicatesV1(int* arr, int n) {
 }
 
 /**
+ * Checking whether a `target` element is exists in the given `array`
+ * 
+ * FYI: The function alters the array!
+ * 
+ * @param arr The array to search in (should be sorted)
+ * @param n The elements count of the given `arr`
+ * @param target Which element to search for
+ * 
+ * @returns `0` | `1` Value representing whether the element already exists
+ */
+int is_exists(int *arr, int n, int target) {
+    int result = binary_search_left(arr, n, target);
+
+    // In case `temp` has negative number, then we already saw this number
+    if (arr[result] < 0)
+        return 1;
+
+    // Assgining negative value to the found position
+    arr[result] = -arr[result];
+    return 0;
+}
+
+/**
     Moves duplicates to the end of the array while maintaining the order of unique elements.
 
-    Parameters:
-        `arr` - Pointer to the first element of the array
-        `n` - The length of the array
+    @param arr Pointer to the first element of the array
+    @param n The length of the array
 
-    Returns:
-        The count of unique elements or -1 if an error occurs.
+    @returns The count of unique elements or -1 if an error occurs.
 */
-int moveDuplicatesV2(int* a, int n) {
-    int index = 0, non_duplicate = 0, i = 0;
-    int* seen = (int*) calloc(1000, sizeof(int));
+int moveDuplicatesV2(int* arr, int n) {
+    int i, neg_number_count = 0;
 
-    // Filling the seen array with each of the values
+    // Allocating and filling an array with the same elements
+    int* temp = (int*) malloc(n * sizeof(int));
+    if (!temp) return -1;
+
+    for (i = 0; i < n; i++)
+        temp[i] = arr[i];
+
+    // Sorting `temp` array
+    quick_sort(temp, 0, n - 1);
     for (i = 0; i < n; i++) {
-        if (!seen[a[i]])
-            a[index++] = a[i];
-
-        seen[a[i]]++; 
+        if (!is_exists(temp, n, arr[i]))
+            arr[i] = -arr[i];
     }
 
-    for (i = 0; i < n; i++) {
-        if (seen[a[i]] > 1) {
-            a[index] = a[i];
-            index += 1;
-            non_duplicate ++;
-            seen[a[i]] = 1;
-        }
+    // Counting the negative elements in `temp` array
+    for (int i = 0; i < n; i++) {
+        if (arr[i] < 0)
+            temp[neg_number_count++] = arr[i];
     }
 
-    free(seen);
-    seen = NULL;
+    // Sorting the source array (`arr`) and turning back each negative value to positive
+    quick_sort(arr, 0, n - 1);
+    for (i = 0; i < neg_number_count; i++)
+        arr[i] = -temp[i];
 
-    non_duplicate = n - (non_duplicate * 2);
-    return non_duplicate;
+    free(temp);
+    return neg_number_count;
 }
 
 /**
     Swap between two characters
 
-    Parameters:
-        `a` - Pointer to the first character to swap
-        `b` - Pointer to the second character to swap
+    @param a Pointer to the first character to swap
+    @param b Pointer to the second character to swap
 */
 void swap_str(char* a, char* b) {
     char temp = *a;
@@ -358,12 +408,11 @@ void swap_str(char* a, char* b) {
 /**
     Reversing the order of the string array
 
-    Parameters:
-        `start_i` - The starting index of reversing
-        `end_i` - The ending index of the reversing
+    @param start_i The starting index of reversing
+    @param end_i The ending index of the reversing
 */
 void reverse(char* start_i, char* end_i) {
-    while (start_i != end_i && start_i && end_i) {
+    while (start_i != end_i && end_i > start_i && start_i && end_i) {
         swap_str(start_i, end_i);
         start_i++;
         end_i--;
@@ -373,35 +422,32 @@ void reverse(char* start_i, char* end_i) {
 /**
     Replaces the string with the next bigger lexicographic permutation string
 
-    Parameters:
-        `str` - Pointer to the first element of the string
-
-    Returns:
-        In case the string changed returned `1` else `0`
+    @param str Pointer to the first element of the string
+    @returns In case the string changed returned `1` else `0`
 */
 int stringPermutation(char *str) {
-    int i, j, length = strlen(str);
+    int length = strlen(str);
+    if (length < 2) 
+        return 0;
 
-    for (i = length - 1; i >= 1; i--) {
-        // Find the pivot (The first element that is smaller than the one before)
-        if (str[i-1] >= str[i])
-            continue;
+    // Find the pivot (The first element that is smaller than the one before)
+    int i = length - 2;
+    while (i >= 0 && str[i] >= str[i + 1]) 
+        i--;
 
-        // Searching the right placement for the pivot
-        for (j = i-1; j > 0; j--) {
-            if (str[j] > str[i-1])
-                break;
-        }
-        
-        // Swap characters at i-1 and j
-        swap_str(&str[i-1], &str[j]);
-        
-        // Reverse from the second position until the end of the string
-        reverse(&str[i-1], &str[length - 1]);
-        return 1;
-    }
+    // No greater permutation exists
+    if (i < 0) 
+        return 0;
 
-    return 0;
+    // Find successor
+    int j = length - 1;
+    while (str[j] <= str[i]) 
+        j--;
+
+    swap_str(&str[i], &str[j]); // Swap pivot and successor
+    reverse(&str[i + 1], &str[length - 1]); // Reverse suffix
+
+    return 1;
 }
 
 /**
@@ -411,13 +457,11 @@ int stringPermutation(char *str) {
     FYI: This function assumes the input array values are non-negative 
     and within the valid range. Behavior is undefined otherwise.)
 
-    Parameters:
-        `arr` - Pointer to the first element of the integer array to be validated
-        `n` - Size of the array.
- 
-    Returns:
-        `1` if the array is valid (no duplicates and can be rearranged),
-        or `0` if a duplicate is found.
+    @param arr Pointer to the first element of the integer array to be validated
+    @param n Size of the array.
+
+    @returns `1` if the array is valid (no duplicates and can be rearranged),
+    or `0` if a duplicate is found.
 */
 int validateArray(int* arr, int n) {
     for (int i = 0; i < n; i++) {
