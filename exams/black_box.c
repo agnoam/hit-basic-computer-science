@@ -1,14 +1,11 @@
 /**
     Searches for a target value in a sorted array using the Binary Search algorithm.
 
-    Parameters:
-        `array` - Pointer to the sorted array.
-        `size` - Size of the array.
-        `target` - The value to be searched for.
+    @param array Pointer to the sorted array.
+    @param size Size of the array.
+    @param target The value to be searched for.
 
-    Returns:
-        If the target is found, the function returns its index in the array.
-        Otherwise, it returns `-1`.
+    @returns If the target is found, the function returns its index in the array. Otherwise, it returns `-1`.
 */
 int binary_search(int* array, int size, int target) {
     int low = 0, high = size - 1;
@@ -31,9 +28,8 @@ int binary_search(int* array, int size, int target) {
 /**
     Prints an array of integers
 
-    Parameters:
-        `arr` - An int pointer to the first element of the array
-        `n` - The length of the given array
+    @param arr An int pointer to the first element of the array
+    @param n The length of the given array
 */
 void print_array(int* arr, int n) {
     printf("[");
@@ -45,9 +41,8 @@ void print_array(int* arr, int n) {
 /**
     Swaps between two integers. 
 
-    Parameters:
-        `a` - First pointer to to swap
-        `b` - Second pointer to swap
+    @param a First pointer to to swap
+    @param b Second pointer to swap
 */
 void swap(int* a, int* b) {
     int temp = *a;
@@ -58,15 +53,13 @@ void swap(int* a, int* b) {
 /**
     Partitions the array around a pivot element.
 
-    Parameters:
-        `arr` - Pointer to the array to be partitioned.
-        `low` - Starting index of the array segment.
-        `high` - Ending index of the array segment.
+    @param arr Pointer to the array to be partitioned.
+    @param low Starting index of the array segment.
+    @param high Ending index of the array segment.
 
-    Returns:
-        The partition index (`j`), where all elements to the left of `j` 
-        are less than or equal to the pivot, and all elements to the right 
-        of `j` are greater than the pivot.
+    @returns The partition index (`j`), where all elements to the left of `j` 
+    are less than or equal to the pivot, and all elements to the right 
+    of `j` are greater than the pivot.
 */
 int partition(int* arr, int low, int high) {
     // Initialize pivot to be the first element
@@ -98,10 +91,9 @@ int partition(int* arr, int low, int high) {
 /**
     Sorts an array in ascending order using the Quick Sort algorithm.
 
-    Parameters:
-        `arr` - Pointer to the array to be sorted.
-        `low` - Starting index of the array segment.
-        `high` - Ending index of the array segment.
+    @param arr Pointer to the array to be sorted.
+    @param low Starting index of the array segment.
+    @param high Ending index of the array segment.
 */
 void quick_sort(int* arr, int low, int high) {
     if (low < high) {
