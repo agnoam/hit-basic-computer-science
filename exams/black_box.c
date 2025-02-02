@@ -26,6 +26,58 @@ int binary_search(int* array, int size, int target) {
 }
 
 /**
+ * Performs a binary search to find the leftmost (first) occurrence of a target value in a sorted array.
+ * 
+ * @param array Pointer to the sorted integer array.
+ * @param size The number of elements in the array.
+ * @param target The value to search for.
+ * 
+ * @return The index of the leftmost occurrence of the target in the array, or -1 if not found.
+ */
+int binary_search_left(int* array, int size, int target) {
+    int low = 0, high = size - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2; // To prevent potential overflow
+        if (array[mid] == target && array[mid-1] != target) {
+            return mid;
+        } else if (array[mid] >= target) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return -1;
+}
+
+/**
+ * Performs a binary search to find the rightmost (last) occurrence of a target value in a sorted array.
+ * 
+ * @param array Pointer to the sorted integer array.
+ * @param size The number of elements in the array.
+ * @param target The value to search for.
+ * 
+ * @return The index of the rightmost occurrence of the target in the array, or -1 if not found.
+ */
+int binary_search_right(int* array, int size, int target) {
+    int low = 0, high = size - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2; // To prevent potential overflow
+        if (array[mid] == target && array[mid+1] != target) {
+            return mid;
+        } else if (array[mid] <= target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return -1;
+}
+
+/**
     Prints an array of integers
 
     @param arr An int pointer to the first element of the array
