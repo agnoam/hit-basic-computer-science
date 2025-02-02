@@ -100,10 +100,18 @@ int is_subsequence(char* str1, char* str2) {
 
 /*
     3.a:
-        [3, 1, 0, 4, 2]
-        
-        [0, 1, 2, 3, 4]
-        [3, 0, 1, 4, 2]
+        This is an example for an array that will result 0 in `is_Perfect()`: [3, 1, 0, 4, 2]
+        Short answer: because of the element: `1`. 
+        Full description: 
+            According to the question details, the array should reference to each of the elements in the given array.
+            In the example given: [3, 0, 1, 4, 2]
+                arr[0] = 3 -> arr[3] = 4 -> arr[4] 2 -> arr[2] 1 -> arr[1] 0 -> arr[0] 3
+                All of the elements were referenced.
+
+            In the example of failure, There is an element which is not referenced.
+            [3, 1, 0, 4, 2]
+            arr[0] = 3 -> arr[3] = 4 -> arr[4] 2 -> arr[2] 0 -> arr[0] = 3
+            Which makes the array element `1` (arr[1]) to be not referenced.
 */
 
 /*
