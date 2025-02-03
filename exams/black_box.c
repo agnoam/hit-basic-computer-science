@@ -158,3 +158,29 @@ void quick_sort(int* arr, int low, int high) {
         quick_sort(arr, pi + 1, high);
     }
 }
+
+/**
+ * Pretty printing 2d array.
+ * 
+ * FUNCTION DOES NOT INCLUDED IN THE ACTUAL EXAM!
+ *
+ * This function prints a 2D matrix represented as a 1D array of integers. It assumes that the array is stored
+ * in a row-major order and prints the elements in rows and columns, with each element formatted to take up
+ * at least 4 characters of space.
+ *
+ * @param a Pointer to the 1D array representing the matrix.
+ *          The array should contain 'rows * cols' elements.
+ * @param rows The number of rows in the matrix.
+ * @param cols The number of columns in the matrix.
+ *
+ * @note The matrix is assumed to be in row-major order, so the element at position (i, j) in the matrix
+ *       corresponds to a[i + j].
+ */
+void print_matrix(int* a, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++)
+            printf("%4d ", a[i*cols+j]);
+        printf("\n");
+    }
+    printf("\n");
+}
