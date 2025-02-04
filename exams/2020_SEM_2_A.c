@@ -24,14 +24,14 @@ int main() {
     int b[] = { 1, 5, 2, 24, 56, 70, 71 };
     int c_size = 0;
     int *c = get_unique_a(a, sizeof(a) / sizeof(a[0]), b, sizeof(b) / sizeof(b[0]), &c_size);
-    printf("Output array should be: 7 10 15 4\n");
+    printf("Output array should be: 7 10 15 4:\n");
     print_array(c, c_size);
 
     // Q2.b
     int _a[] = { 2,4,5,7,10,15 };
     int _b[] = { 1,2,4,7,9,10,70,71 };
     c = get_elements_of_ab(_a, sizeof(_a) / sizeof(_a[0]), _b, sizeof(_b) / sizeof(_b[0]), &c_size);
-    printf("Output array should be: 2,4,7,10:\n");
+    printf("Output array should be: 2 4 7 10:\n");
     print_array(c, c_size);
 
     // Q3
