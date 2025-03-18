@@ -2,7 +2,7 @@ This folder contains unit-test files for each assignment.
 In order to unit-test your own files, you should copy your assignment file into `/tests/copied_assignment/first_assignment.c` and ommit the `int main()` function.
 
 For example:
-1. Check your assignment file have functions as described in the `test.c` file [example test file](/tests/first/test.c)
+1. Check your assignment file have functions as described in the `first_assignment.c` file [example test file](./copied_src_code/first_assignment.c) (This file is not indeed the latest version of the code, so it advised to copy all of the assignments again)
 2. Copy your `c program` into the appropriate directory into the path `tests/copied_src_code/<file_name>.c`
 3. Run the test using `./test.exe` and in case the test run successfully, no errors will thrown.
 
