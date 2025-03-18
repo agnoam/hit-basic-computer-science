@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "black_box.c"
+#include "../black_box.c"
 
 #define R 4
 #define C 5

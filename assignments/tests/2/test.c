@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "../utils.c"
-#include "../dist/second_assignment.c"
+#include "../copied_src_code/second_assignment.c"
 
 void test_q_one() {
     redirect_io("assets/input_files/q1/(8)=4.txt", 0);

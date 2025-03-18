@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "black_box.c"
+#include "../black_box.c"
 
 #define R 3
 #define C 7

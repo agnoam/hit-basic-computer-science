@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "dist/first_assignment.c"
+#include "../copied_src_code/first_assignment.c"
 
 void test_q_one() {
     assert(q_one(6) == 123456); // Example from assets
