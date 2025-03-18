@@ -4,21 +4,21 @@ This repository contains home assignments and exam solutions from a **Basic C Pr
 It includes the original question files, implemented solutions, testing utilities, and additional scripts for debugging and execution.
 
 ## 📂 Repository Structure
-📁 .vscode/ # VS Code configurations for compiling and debugging C code 
-📁 assignments/ # Contains all assignments and related files 
-├── 📁 questions/ # PDFs with the assignment questions 
-├── 📁 <digit_timestamp>/ # Folder containing the solution files for a specific assignment 
-├── 📁 tests/ # Unit testing setup 
-├── utils.c # Utility functions for unit tests 
-├── copy_assignment.sh # Script to copy and modify assignment solutions for testing 
-├── 📁 copied_src_code/ # Destination folder for copied assignment source files 
-├── README.md # Instructions on how to run unit tests 
-├── 📁 <digit_timestamp>/ # Tests corresponding to each assignment
-📁 exams/ # Contains all exam solutions and questions 
-├── 📁 questions/ # PDFs with exam questions 
-├── <questionnaire_name>.c # C source files with exam solutions 
-📁 playground/ # Sandbox for testing ideas and debugging 
-📄 black_box.c # Implementation of missing functions needed for execution 
+📁 .vscode/ # VS Code configurations for compiling and debugging C code <br/>
+📁 assignments/ # Contains all assignments and related files <br/>
+├── 📁 questions/ # PDFs with the assignment questions <br/>
+├── 📁 <digit_timestamp>/ # Folder containing the solution files for a specific assignment <br/>
+├── 📁 tests/ # Unit testing setup <br/>
+├── utils.c # Utility functions for unit tests <br/>
+├── copy_assignment.sh # Script to copy and modify assignment solutions for testing <br/>
+├── 📁 copied_src_code/ # Destination folder for copied assignment source files <br/>
+├── README.md # Instructions on how to run unit tests <br/>
+├── 📁 <digit_timestamp>/ # Tests corresponding to each assignment <br/>
+📁 exams/ # Contains all exam solutions and questions <br/>
+├── 📁 questions/ # PDFs with exam questions <br/>
+├── <questionnaire_name>.c # C source files with exam solutions <br/>
+📁 playground/ # Sandbox for testing ideas and debugging <br/>
+📄 black_box.c # Implementation of missing functions needed for execution <br/>
 
 ## Running the unit tests provided
 For more details, check the unit tests [README.md](/assignments/tests/README.md)
