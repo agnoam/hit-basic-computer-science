@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "black_box.c"
+#include "../black_box.c"
 
 #define N 4
 

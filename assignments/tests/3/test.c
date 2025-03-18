@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "../dist/third_assignment.c"
+#include "../copied_src_code/third_assignment.c"
 
 void test_q_two() {
     assert(number_of_bin_ones(0) == 0);

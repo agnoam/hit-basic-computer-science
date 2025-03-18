@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "black_box.c"
+#include "../black_box.c"
 
 void print_key(int* arr, int n, int key);
 int* get_unique_a(int* a, int n, int* b, int m, int* c_size);
